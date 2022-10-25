@@ -1,0 +1,28 @@
+name: kvs
+author: Andrew <ziangong0714@gmail.com>
+about: key-value memory store
+subcommands:
+    - set:
+        about: set key-value
+        version: "1.0"
+        args:
+            - KEY:
+                help: key
+                required: true
+            - VALUE:
+                help: value
+                required: true
+    - get:
+        about: get value with key
+        version: "1.0"
+        args:
+            - KEY:
+                help: key
+                required: true
+    - rm:
+        about: remove key and value
+        version: "1.0"
+        args:
+            - KEY:
+                help: key
+                required: true
