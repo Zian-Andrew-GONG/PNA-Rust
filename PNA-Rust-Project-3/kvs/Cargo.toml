@@ -19,6 +19,7 @@ criterion = "0.3"
 rand = "0.6.5"
 log = "*"
 env_logger = "*"
+sled = "*"
 
 [dependencies.clap]
 features = ["cargo"]

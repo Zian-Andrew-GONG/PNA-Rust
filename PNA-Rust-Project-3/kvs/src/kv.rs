@@ -1,3 +1,4 @@
+use crate::KvsEngine::KvsEngine;
 use crate::{KvStoreError, Result};
 use serde::{Deserialize, Serialize};
 use serde_json::{self, Deserializer};
@@ -94,7 +95,7 @@ impl KvStore {
         })
     }
 
-    pub fn set(&mut self, key: String, value: String) -> Result<()> {
+    fn _set(&mut self, key: String, value: String) -> Result<()> {
         let command = Command::set(key, value);
         let data = serde_json::to_vec(&command)?;
         // write json to file
@@ -117,7 +118,7 @@ impl KvStore {
 
         Ok(())
     }
-    pub fn get(&mut self, key: String) -> Result<Option<String>> {
+    fn _get(&mut self, key: String) -> Result<Option<String>> {
         if let Some(cmd) = self.index.get(&key) {
             let reader = self
                 .readers
@@ -135,7 +136,7 @@ impl KvStore {
             Ok(None)
         }
     }
-    pub fn remove(&mut self, key: String) -> Result<()> {
+    fn _remove(&mut self, key: String) -> Result<()> {
         if self.index.contains_key(&key) {
             self.index.remove(&key);
             let cmd = Command::remove(key);
@@ -260,4 +261,18 @@ fn load(
         }
     }
     Ok(useless)
+}
+
+
+impl KvsEngine for KvStore {
+    fn set(&mut self, key: String, value: String) -> Result<()> {
+        self._set(key, value)
+    }
+
+    fn get(&mut self, key: String) -> Result<Option<String>> {
+        self._get(key)
+    }
+    fn remove(&mut self, key: String) -> Result<()> {
+        self._remove(key)
+    }
 }

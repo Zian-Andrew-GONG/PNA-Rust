@@ -3,8 +3,10 @@ pub use error::{KvStoreError, Result};
 
 mod kv;
 pub use kv::KvStore;
+mod msg;
+pub use msg::{Request, Response};
 
-mod KvsClient;
-mod KvsEngine;
-mod KvsServer;
-mod SledKvsEngine;
+pub mod KvsClient;
+pub mod KvsServer;
+pub mod KvsEngine;
+pub mod SledKvsEngine;

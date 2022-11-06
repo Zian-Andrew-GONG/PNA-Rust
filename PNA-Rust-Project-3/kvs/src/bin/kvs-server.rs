@@ -1,5 +1,7 @@
+use std::env::current_dir;
+
 use clap::{arg, command};
-use kvs::{KvStore, Result};
+use kvs::{KvStore, KvsServer, Result, SledKvsEngine::SledKvsEngine};
 use log::{info, warn, LevelFilter};
 
 fn main() -> Result<()> {
@@ -22,6 +24,13 @@ fn main() -> Result<()> {
     let addr = matches.get_one::<String>("addr").unwrap();
     let engine = matches.get_one::<String>("engine").unwrap();
     // choose an engine
+    if engine == "sled" {
+        let server = KvsServer::KvsServer::new(SledKvsEngine::new(sled::open(current_dir()?)?));
+        server.run(addr).unwrap();
+    } else {
+        let server = KvsServer::KvsServer::new(KvStore::open(current_dir()?).unwrap());
+        server.run(addr).unwrap();
+    }
 
     Ok(())
 }
