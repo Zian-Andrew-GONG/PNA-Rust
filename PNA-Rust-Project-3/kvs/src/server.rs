@@ -7,7 +7,7 @@ use log::{error, info};
 use serde::Deserialize;
 use serde_json::Deserializer;
 
-use crate::{KvsEngine::KvsEngine, Request, Response};
+use crate::{engine::KvsEngine, Request, Response};
 
 pub struct KvsServer<E: KvsEngine> {
     engine: E,

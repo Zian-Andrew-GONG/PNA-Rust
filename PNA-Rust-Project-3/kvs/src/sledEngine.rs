@@ -1,6 +1,7 @@
-use crate::{KvStoreError, Result};
 use sled::{Db, Tree};
-use crate::KvsEngine::KvsEngine;
+use crate::engine::KvsEngine;
+use crate::{KvStoreError, Result};
+
 
 /// Wrapper of `sled::Db`
 #[derive(Clone)]

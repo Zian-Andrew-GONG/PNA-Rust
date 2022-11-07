@@ -47,7 +47,7 @@ fn main() -> Result<()> {
                 let value = args.get_one::<String>("VALUE").unwrap();
                 let addr = args.get_one::<String>("addr").unwrap();
                 // send request to server
-                let mut client = KvsClient::KvsClient::new(addr).unwrap();
+                let mut client = KvsClient::new(addr).unwrap();
                 let request = Request::SET(key.to_owned(), value.to_owned());
                 client.request(&request).unwrap();
             }
@@ -55,7 +55,7 @@ fn main() -> Result<()> {
                 let key = args.get_one::<String>("KEY").unwrap();
                 let addr = args.get_one::<String>("addr").unwrap();
                 // send request to server
-                let mut client = KvsClient::KvsClient::new(addr).unwrap();
+                let mut client = KvsClient::new(addr).unwrap();
                 let request = Request::GET(key.to_owned());
                 client.request(&request).unwrap();
     }
@@ -63,7 +63,7 @@ fn main() -> Result<()> {
                 let key = args.get_one::<String>("KEY").unwrap();
                 let addr = args.get_one::<String>("addr").unwrap();
                 // send request to server
-                let mut client = KvsClient::KvsClient::new(addr).unwrap();
+                let mut client = KvsClient::new(addr).unwrap();
                 let request = Request::RM(key.to_owned());
                 client.request(&request).unwrap();
    }
