@@ -3,6 +3,7 @@ use std::{
     net::TcpStream,
 };
 
+use log::{debug, info};
 use serde::Deserialize;
 use serde_json::de::{Deserializer, IoRead};
 
@@ -25,6 +26,7 @@ impl KvsClient {
         serde_json::to_writer(&mut self.writer, request).unwrap();
         self.writer.flush().unwrap();
         let response = Response::deserialize(&mut self.reader).unwrap();
+        info!("response: {:?}", response);
         match response {
             Response::Ok(value) => Ok(value),
             Response::Err(msg) => Err(()),

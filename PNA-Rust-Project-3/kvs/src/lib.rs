@@ -1,8 +1,8 @@
 mod error;
 pub use error::{KvStoreError, Result};
 
-mod kvEngine;
-pub use kvEngine::KvStore;
+mod kvsEngine;
+pub use kvsEngine::KvStore;
 mod msg;
 pub use msg::{Request, Response};
 

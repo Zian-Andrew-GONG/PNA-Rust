@@ -1,6 +1,6 @@
 use clap::{arg, command, Command};
 use env_logger;
-use kvs::{KvsClient, Result, Request};
+use kvs::{KvsClient, Request, Result};
 use log::{info, warn, LevelFilter};
 use std::{env::current_dir, process::exit};
 fn main() -> Result<()> {
@@ -57,8 +57,12 @@ fn main() -> Result<()> {
                 // send request to server
                 let mut client = KvsClient::new(addr).unwrap();
                 let request = Request::GET(key.to_owned());
-                client.request(&request).unwrap();
-    }
+                if let Some(res) = client.request(&request).unwrap() {
+                    println!("{}", res);
+                } else {
+                    println!("Key not found");
+                }
+            }
             "rm" => {
                 let key = args.get_one::<String>("KEY").unwrap();
                 let addr = args.get_one::<String>("addr").unwrap();
@@ -66,7 +70,7 @@ fn main() -> Result<()> {
                 let mut client = KvsClient::new(addr).unwrap();
                 let request = Request::RM(key.to_owned());
                 client.request(&request).unwrap();
-   }
+            }
             _ => {
                 warn!("unimplemented");
                 exit(1);
