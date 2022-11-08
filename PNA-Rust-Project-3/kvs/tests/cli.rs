@@ -153,64 +153,64 @@ fn server_cli_version() {
 
 #[test]
 fn cli_log_configuration() {
-    // let temp_dir = TempDir::new().unwrap();
-    // let stderr_path = temp_dir.path().join("stderr");
-    // let mut cmd = Command::cargo_bin("kvs-server").unwrap();
-    // let mut child = cmd
-    //     .args(&["--engine", "kvs", "--addr", "127.0.0.1:4001"])
-    //     .current_dir(&temp_dir)
-    //     .stderr(File::create(&stderr_path).unwrap())
-    //     .spawn()
-    //     .unwrap();
-    // thread::sleep(Duration::from_secs(1));
-    // child.kill().expect("server exited before killed");
+    let temp_dir = TempDir::new().unwrap();
+    let stderr_path = temp_dir.path().join("stderr");
+    let mut cmd = Command::cargo_bin("kvs-server").unwrap();
+    let mut child = cmd
+        .args(&["--engine", "kvs", "--addr", "127.0.0.1:4001"])
+        .current_dir(&temp_dir)
+        .stderr(File::create(&stderr_path).unwrap())
+        .spawn()
+        .unwrap();
+    thread::sleep(Duration::from_secs(1));
+    child.kill().expect("server exited before killed");
 
-    // let content = fs::read_to_string(&stderr_path).expect("unable to read from stderr file");
-    // println!("content: {}", content);
-    // assert!(content.contains(env!("CARGO_PKG_VERSION")));
-    // assert!(content.contains("kvs"));
-    // assert!(content.contains("127.0.0.1:4001"));
+    let content = fs::read_to_string(&stderr_path).expect("unable to read from stderr file");
+    println!("content: {}", content);
+    assert!(content.contains(env!("CARGO_PKG_VERSION")));
+    assert!(content.contains("kvs"));
+    assert!(content.contains("127.0.0.1:4001"));
 }
 
 #[test]
 fn cli_wrong_engine() {
-    // // sled first, kvs second
-    // {
-    //     let temp_dir = TempDir::new().unwrap();
-    //     let mut cmd = Command::cargo_bin("kvs-server").unwrap();
-    //     let mut child = cmd
-    //         .args(&["--engine", "sled", "--addr", "127.0.0.1:4002"])
-    //         .current_dir(&temp_dir)
-    //         .spawn()
-    //         .unwrap();
-    //     thread::sleep(Duration::from_secs(1));
-    //     child.kill().expect("server exited before killed");
+    // sled first, kvs second
+    {
+        let temp_dir = TempDir::new().unwrap();
+        let mut cmd = Command::cargo_bin("kvs-server").unwrap();
+        let mut child = cmd
+            .args(&["--engine", "sled", "--addr", "127.0.0.1:4002"])
+            .current_dir(&temp_dir)
+            .spawn()
+            .unwrap();
+        thread::sleep(Duration::from_secs(1));
+        child.kill().expect("server exited before killed");
 
-    //     let mut cmd = Command::cargo_bin("kvs-server").unwrap();
-    //     cmd.args(&["--engine", "kvs", "--addr", "127.0.0.1:4003"])
-    //         .current_dir(&temp_dir)
-    //         .assert()
-    //         .failure();
-    // }
+        let mut cmd = Command::cargo_bin("kvs-server").unwrap();
+        cmd.args(&["--engine", "kvs", "--addr", "127.0.0.1:4003"])
+            .current_dir(&temp_dir)
+            .assert()
+            .failure();
+    }
 
-    // // kvs first, sled second
-    // {
-    //     let temp_dir = TempDir::new().unwrap();
-    //     let mut cmd = Command::cargo_bin("kvs-server").unwrap();
-    //     let mut child = cmd
-    //         .args(&["--engine", "kvs", "--addr", "127.0.0.1:4002"])
-    //         .current_dir(&temp_dir)
-    //         .spawn()
-    //         .unwrap();
-    //     thread::sleep(Duration::from_secs(1));
-    //     child.kill().expect("server exited before killed");
+    // kvs first, sled second
+    {
+        let temp_dir = TempDir::new().unwrap();
+        let mut cmd = Command::cargo_bin("kvs-server").unwrap();
+        let mut child = cmd
+            .args(&["--engine", "kvs", "--addr", "127.0.0.1:4002"])
+            .current_dir(&temp_dir)
+            .spawn()
+            .unwrap();
+        thread::sleep(Duration::from_secs(1));
+        child.kill().expect("server exited before killed");
 
-    //     let mut cmd = Command::cargo_bin("kvs-server").unwrap();
-    //     cmd.args(&["--engine", "sled", "--addr", "127.0.0.1:4003"])
-    //         .current_dir(&temp_dir)
-    //         .assert()
-    //         .failure();
-    // }
+        let mut cmd = Command::cargo_bin("kvs-server").unwrap();
+        cmd.args(&["--engine", "sled", "--addr", "127.0.0.1:4003"])
+            .current_dir(&temp_dir)
+            .assert()
+            .failure();
+    }
 }
 
 fn cli_access_server(engine: &str, addr: &str) {
