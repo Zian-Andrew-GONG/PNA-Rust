@@ -2,7 +2,7 @@ use std::{env::current_dir, process::exit};
 
 use clap::{arg, command};
 use kvs::{KvStore, KvsServer, Result, SledKvsEngine};
-use log::{info, warn, LevelFilter};
+use log::{LevelFilter};
 
 fn main() -> Result<()> {
     env_logger::builder().filter_level(LevelFilter::Info).init();
@@ -30,14 +30,14 @@ fn main() -> Result<()> {
             exit(1);
         }
         let server = KvsServer::new(SledKvsEngine::new(sled::open(path.join("sled"))?));
-        server.run(addr).unwrap();
+        server.run(addr)?;
     } else {
         let path = current_dir()?.join("engine");
         if path.exists() && !path.join("kvs").exists() {
             exit(1);
         }
-        let server = KvsServer::new(KvStore::open(path.join("kvs")).unwrap());
-        server.run(addr).unwrap();
+        let server = KvsServer::new(KvStore::open(path.join("kvs"))?);
+        server.run(addr)?;
     }
 
     Ok(())

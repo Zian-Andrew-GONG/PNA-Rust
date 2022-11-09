@@ -16,6 +16,9 @@ pub enum KvStoreError {
     /// Key or value is invalid UTF-8 sequence
     #[fail(display = "UTF-8 error: {}", _0)]
     Utf8(#[cause] FromUtf8Error),
+    /// Error with a string message
+    #[fail(display = "{}", _0)]
+    StringError(String),
 }
 
 impl From<serde_json::Error> for KvStoreError {

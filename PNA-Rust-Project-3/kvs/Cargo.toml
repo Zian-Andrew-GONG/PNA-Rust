@@ -22,4 +22,5 @@ env_logger = "*"
 sled = "*"
 
 [dependencies.clap]
+version = "*"
 features = ["cargo"]

@@ -1,8 +1,8 @@
 use clap::{arg, command, Command};
 use env_logger;
 use kvs::{KvsClient, Request, Result};
-use log::{info, warn, LevelFilter};
-use std::{env::current_dir, process::exit};
+use log::{warn, LevelFilter};
+use std::{process::exit};
 fn main() -> Result<()> {
     env_logger::builder().filter_level(LevelFilter::Info).init();
     let matches = command!()
@@ -47,17 +47,17 @@ fn main() -> Result<()> {
                 let value = args.get_one::<String>("VALUE").unwrap();
                 let addr = args.get_one::<String>("addr").unwrap();
                 // send request to server
-                let mut client = KvsClient::new(addr).unwrap();
+                let mut client = KvsClient::new(addr)?;
                 let request = Request::SET(key.to_owned(), value.to_owned());
-                client.request(&request).unwrap();
+                client.request(&request)?;
             }
             "get" => {
                 let key = args.get_one::<String>("KEY").unwrap();
                 let addr = args.get_one::<String>("addr").unwrap();
                 // send request to server
-                let mut client = KvsClient::new(addr).unwrap();
+                let mut client = KvsClient::new(addr)?;
                 let request = Request::GET(key.to_owned());
-                if let Some(res) = client.request(&request).unwrap() {
+                if let Some(res) = client.request(&request)? {
                     println!("{}", res);
                 } else {
                     println!("Key not found");
@@ -67,9 +67,9 @@ fn main() -> Result<()> {
                 let key = args.get_one::<String>("KEY").unwrap();
                 let addr = args.get_one::<String>("addr").unwrap();
                 // send request to server
-                let mut client = KvsClient::new(addr).unwrap();
+                let mut client = KvsClient::new(addr)?;
                 let request = Request::RM(key.to_owned());
-                client.request(&request).unwrap();
+                client.request(&request)?;
             }
             _ => {
                 warn!("unimplemented");

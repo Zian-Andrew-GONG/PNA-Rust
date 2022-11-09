@@ -1,3 +1,4 @@
+use crate::Result;
 use std::{
     io::BufReader,
     net::{TcpListener, TcpStream, ToSocketAddrs},
@@ -18,8 +19,8 @@ impl<E: KvsEngine> KvsServer<E> {
         KvsServer { engine }
     }
 
-    pub fn run<A: ToSocketAddrs>(mut self, addr: A) -> Result<(), ()> {
-        let listener = TcpListener::bind(addr).unwrap();
+    pub fn run<A: ToSocketAddrs>(mut self, addr: A) -> Result<()> {
+        let listener = TcpListener::bind(addr)?;
         for stream in listener.incoming() {
             match stream {
                 Ok(stream) => {
@@ -33,10 +34,9 @@ impl<E: KvsEngine> KvsServer<E> {
         Ok(())
     }
 
-    pub fn handle_connection(&mut self, mut stream: TcpStream) -> Result<(), ()> {
+    pub fn handle_connection(&mut self, mut stream: TcpStream) -> Result<()> {
         let request =
-            Request::deserialize(&mut Deserializer::from_reader(BufReader::new(&mut stream)))
-                .unwrap();
+            Request::deserialize(&mut Deserializer::from_reader(BufReader::new(&mut stream)))?;
         info!("Request: {:?}", request);
         let response;
         match request {
@@ -49,12 +49,12 @@ impl<E: KvsEngine> KvsServer<E> {
                 Err(err) => response = Response::Err(format!("{err}")),
             },
             Request::RM(key) => match self.engine.remove(key) {
-                Ok(value) => response = Response::Ok(None),
+                Ok(_) => response = Response::Ok(None),
                 Err(err) => response = Response::Err(format!("{err}")),
             },
         }
         info!("Response: {:?}", &response);
-        serde_json::to_writer(stream, &response).unwrap();
+        serde_json::to_writer(stream, &response)?;
         Ok(())
     }
 }

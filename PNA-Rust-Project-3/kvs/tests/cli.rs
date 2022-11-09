@@ -151,6 +151,7 @@ fn server_cli_version() {
         .stdout(contains(env!("CARGO_PKG_VERSION")));
 }
 
+/// What do you mean??? I gave up...
 #[test]
 fn cli_log_configuration() {
     let temp_dir = TempDir::new().unwrap();
