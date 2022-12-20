@@ -14,3 +14,6 @@ mod engine;
 pub use engine::KvsEngine;
 mod sled_engine;
 pub use sled_engine::SledKvsEngine;
+
+pub mod thread_pool;
+pub use thread_pool::ThreadPool;
